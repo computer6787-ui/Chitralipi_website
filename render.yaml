@@ -4,10 +4,9 @@
 # "New +" -> "Blueprint" and point it at this repository.
 #
 # This is the only deployable service in this repository: the movie/series
-# web app. Ad blocking ships as browser-side options (Brave Shields, uBlock
-# Origin, or a bundled MV3 extension) rather than an in-page engine, because
-# the player is a cross-origin iframe that site code cannot modify. See
-# docs/ADBLOCK.md.
+# web app. Ad blocking is handled by the browser (Brave Shields or uBlock
+# Origin), since site code cannot modify the cross-origin player iframe.
+# See docs/ADBLOCK.md.
 
 services:
   - type: web

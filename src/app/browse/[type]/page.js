@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import FilterBar from "@/components/FilterBar";
 import PosterCard from "@/components/PosterCard";
+import { resolveGenreFilter } from "@/lib/genre-collection";
 import { discover } from "@/lib/tmdb";
 
 export const revalidate = 3600;
@@ -37,7 +38,9 @@ export default async function BrowsePage({ params, searchParams }) {
   if (!type) notFound();
 
   const sp = await searchParams;
-  const genre = typeof sp.genre === "string" ? sp.genre : "";
+  const genreParam = typeof sp.genre === "string" ? sp.genre : "";
+  const genre = genreParam ? resolveGenreFilter(genreParam, type) : "";
+  if (genreParam && !genre) notFound();
   const sort = typeof sp.sort === "string" ? sp.sort : "popular";
   const page = Math.max(1, Number(sp.page) || 1);
 
@@ -129,6 +132,7 @@ function Pagination({ type, page, totalPages, params }) {
     <nav className="mt-16 flex flex-wrap items-center justify-center gap-1.5" aria-label="Pagination">
       <Link
         href={buildHref(type, Math.max(1, page - 1), params)}
+        prefetch={false}
         scroll={false}
         aria-disabled={page <= 1}
         className={`${base} ${
@@ -146,6 +150,7 @@ function Pagination({ type, page, totalPages, params }) {
         <Link
           key={p}
           href={buildHref(type, p, params)}
+          prefetch={false}
           scroll={false}
           aria-current={p === page ? "page" : undefined}
           className={`${base} tabular-nums ${
@@ -162,6 +167,7 @@ function Pagination({ type, page, totalPages, params }) {
 
       <Link
         href={buildHref(type, Math.min(totalPages, page + 1), params)}
+        prefetch={false}
         scroll={false}
         aria-disabled={page >= totalPages}
         className={`${base} ${

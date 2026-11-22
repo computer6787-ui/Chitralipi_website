@@ -571,6 +571,16 @@
     }
   }
 
+  .player-frame-root:fullscreen,
+  .player-frame-root:-webkit-full-screen {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    background: #000;
+  }
+
   /* Reduced motion: strip movement, keep every state legible. */
   @media (prefers-reduced-motion: reduce) {
     html {

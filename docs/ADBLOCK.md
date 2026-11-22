@@ -6,11 +6,11 @@
 is CineSrc:
 
 ```jsx
-<iframe src="https://cinesrc.st/embed/movie/{id}" sandbox="allow-scripts allow-same-origin allow-forms allow-presentation" />
+<iframe src="https://cinesrc.st/embed/movie/{id}" allow="fullscreen" allowfullscreen />
 ```
 
-> 🛡️ **Default Protection with CineSrc & Chitralipi Blocker**:
-> **CineSrc** is our default provider, pre-fortified with native iframe sandboxing and custom-shielded by the invincible **Chitralipi Ad Blocker** to vaporize 99.9% of popups, rogue redirect scripts, and invasive ad trackers into digital dust before they even dare to spawn. For the absolute cleanest, god-tier, zero-interruption cinema experience in the galaxy, just stick with **CineSrc**!
+> CineSrc is the default provider, but the site cannot control ads or scripts
+> served inside its cross-origin player. Use a browser content blocker if needed.
 
 The same-origin policy means `chitralipi` code cannot read or modify anything
 inside that frame. Popunders, overlay click-bait and ad iframes are injected by
@@ -18,9 +18,8 @@ the player's host, so **no server-side or React-side change can remove them**.
 Blocking has to happen in your browser, on your machine. (The other providers
 in `src/lib/providers.js` behave the same way — only the host changes.)
 
-We hardened what we could from the site side anyway (`referrerPolicy`, `title`
-for a11y) — see `src/app/watch/[id]/page.jsx` — but that is defence in depth,
-not a fix.
+The player frame sets a title and referrer policy, but that is defence in depth,
+not ad blocking.
 
 > **Do not add a `sandbox` attribute to the player iframe.** It was tried and
 > reverted: the player refuses to render inside a sandboxed frame ("This
@@ -38,17 +37,14 @@ not a fix.
 > video playing inside it. Untrusted content belongs in a real browser
 > process, where Chromium's process isolation applies.
 
-## The three options
+## The two options
 
-Pick in this order: Brave if you already use it (nothing to do), uBlock Origin
-otherwise, and the bundled extension if you would rather not depend on a
-third-party store.
+Pick Brave if you already use it; otherwise, install uBlock Origin.
 
 | Option | Stops popups/click-bait | Stops ad *network* requests | Effort |
 | --- | --- | --- | --- |
 | [Brave browser](#1-brave-browser-recommended) | Yes | Yes | **Nothing** |
 | [uBlock Origin](#2-ublock-origin) | Yes | Yes | Install from store |
-| [Bundled MV3 extension](#3-bundled-mv3-extension) | Partly | Yes | Download + load |
 
 ## How Brave does it (and why a site cannot copy it)
 
@@ -80,15 +76,6 @@ ad servers on that page:
 attribute on a parent frame, it redirects itself to `/sandbox.php`. That is why
 adding `sandbox` to our iframe broke playback — see the warning above.
 
-These hosts are listed in `browser-extension/rules.js`, so the bundled
-extension blocks them by name rather than relying on a filter list.
-
-Filmu's own ad hosts have not been fingerprinted the same way yet. Its host is
-covered by name (and by the EasyList-based lists the extension syncs), but if
-you find popunders on it, add the host to `AD_HOSTS` in
-`browser-extension/rules.js`.
-
-
 ### 1. Brave browser (recommended)
 
 Nothing to install. Shields is on by default for every site.
@@ -113,45 +100,4 @@ install this.
    Annoyances enabled (these are the defaults).
 3. **Settings → Filter assets**: leave the defaults enabled.
 
-No Chitralipi-specific setup needed. It uses a real content-blocking engine
-rather than request matching, so it also handles the cosmetic and scriptlet
-rules our extension skips.
-
-### 3. Bundled MV3 extension
-
-Folder: `browser-extension/`. Blocks requests via `declarativeNetRequest`, so
-nothing is even sent.
-
-1. Visit `/adblock` and click **Download extension (.zip)** (served by
-   `src/app/adblock/extension/route.js`, which zips the folder at request time).
-2. Unzip it into its own folder.
-3. Open `chrome://extensions` (or `edge://extensions`).
-4. Enable **Developer mode**.
-5. **Load unpacked** → select the folder you just unzipped.
-6. Click the extension icon once so the filter lists download.
-
-It ships 358 built-in rules (58 ad/tracking hosts plus 12 player hosts × 25 ad
-paths) and syncs EasyList, EasyPrivacy and Fanboy's Annoyances into dynamic DNR
-rules on install and every 6 hours. The popup shows the active rule count and
-has a kill switch.
-
-Because every built-in rule is installed as a *dynamic* rule rather than a
-manifest `rules.json`, the kill switch genuinely stops all blocking. If the
-rule set ever exceeds Chrome's dynamic-rule quota, or the DNR update fails,
-the extension sets `lastError` and the popup shows that failure instead of
-reporting a rule count that is not actually active.
-
-`rules.js` holds the built-in rules; `background.js` translates Adblock Plus
-filter lines into DNR rules. Only `||host^` and `||host^$domain=…` forms are
-translated — cosmetic (`##`) and scriptlet (`#$#`) rules are skipped, and any
-line with a negated option (`$~script`) is skipped rather than risk
-over-blocking. Rules the translator cannot represent safely are ignored, so
-coverage is narrower than uBlock's but never breaks playback.
-
-## Verifying it works
-
-- The extension popup shows a non-zero rule count.
-- Clicking the player does not open a new tab or window.
-- No notification permission prompt appears.
-- `chrome://extensions` → the extension's service-worker console shows
-  `[Chitralipi Ad Blocker] installed`.
+No Chitralipi-specific setup is needed.

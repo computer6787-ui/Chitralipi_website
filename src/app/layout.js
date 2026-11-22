@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
 import Header from "@/components/Header";
 import IntentLink from "@/components/IntentLink";

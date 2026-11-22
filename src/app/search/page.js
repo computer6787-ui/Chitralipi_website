@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { Suspense } from "react";
 import IntentLink from "@/components/IntentLink";
 import PosterCard from "@/components/PosterCard";
@@ -91,7 +90,6 @@ export default async function SearchPage({ searchParams }) {
                   key={tab.id}
                   href={`/search?${query}`}
                   aria-current={active ? "true" : undefined}
-                  prefetch
                   className={`rounded-full px-3.5 py-1.5 text-[12.5px] font-medium transition-[background-color,color] duration-200 ease-[var(--ease-standard)] ${
                     active
                       ? "bg-ink-800 text-ink-100 [box-shadow:var(--elev-1)]"

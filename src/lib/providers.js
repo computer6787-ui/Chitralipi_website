@@ -13,7 +13,6 @@ export const PROVIDERS = [
     movie: 'https://cinesrc.st/embed/movie',
     tv: 'https://cinesrc.st/embed/tv',
     default: true,
-    sandbox: true,
   },
   {
     id: 'filmu',

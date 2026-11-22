@@ -3,8 +3,6 @@
 import { useState } from "react";
 import Link from "next/link";
 
-const REPO_EXT = "browser-extension";
-
 const OPTIONS = [
   {
     id: "brave",
@@ -37,22 +35,6 @@ const OPTIONS = [
     externalUrl: "https://ublockorigin.com/",
     externalLabel: "ublockorigin.com",
   },
-  {
-    id: "extension",
-    tag: "Chitralipi extension",
-    name: "Chitralipi Ad Blocker extension",
-    blurb:
-      "A Manifest V3 extension bundled with this project. Blocks ad requests before they leave your browser, using uBlock's EasyList lists plus rules targeting this exact player.",
-    steps: [
-      "Download the .zip below and unzip it into its own folder.",
-      "Open chrome://extensions (or edge://extensions).",
-      "Turn on Developer mode.",
-      "Choose 'Load unpacked' and select the folder you just unzipped.",
-      "Click the extension icon once so the filter lists download.",
-    ],
-    cta: "Download extension (.zip)",
-    href: "/adblock/extension",
-  },
 ];
 
 export default function AdBlockPage() {
@@ -63,6 +45,7 @@ export default function AdBlockPage() {
       <header className="pt-12 sm:pt-16">
         <Link
           href="/"
+          prefetch={false}
           className="group inline-flex items-center gap-1.5 text-[12.5px] text-ink-400 transition-colors duration-200 hover:text-ink-100"
         >
           <span className="inline-block transition-transform duration-300 ease-[var(--ease-emphasised)] group-hover:-translate-x-0.5">
@@ -133,16 +116,6 @@ export default function AdBlockPage() {
                       >
                         {o.cta}
                       </a>
-                    )}
-
-                    {o.id === "extension" && (
-                      <p className="text-sm text-ink-400">
-                        Select the{" "}
-                        <code className="rounded bg-ink-800 px-1.5 py-0.5 text-xs text-ink-200">
-                          {REPO_EXT}/
-                        </code>{" "}
-                        folder in this project.
-                      </p>
                     )}
 
                     {o.external && o.externalUrl && (

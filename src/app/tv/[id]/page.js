@@ -278,6 +278,7 @@ async function EpisodeList({ showId, seasonNumber }) {
         <li key={ep.id}>
           <Link
             href={`/watch/tv/${showId}/${seasonNumber}/${ep.episode_number}`}
+            prefetch={false}
             className="flex items-center gap-3 rounded-lg p-2 transition-colors duration-150 hover:bg-ink-800"
           >
             {IMG.still(ep.still_path) ? (

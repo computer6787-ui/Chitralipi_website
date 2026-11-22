@@ -70,6 +70,7 @@ export default async function Home() {
               <div className="mt-7 flex flex-wrap items-center gap-3">
                 <Link
                   href={kindOf(hero) === "tv" ? `/tv/${hero.id}` : `/movie/${hero.id}`}
+                  prefetch={false}
                   className="group inline-flex items-center gap-2 rounded-full bg-chit-500 px-5 py-2.5 text-[13.5px] font-semibold text-ink-950 shadow-[0_4px_20px_-4px_rgba(217,162,83,0.5)] transition-[background-color,transform,box-shadow] duration-200 ease-[var(--ease-standard)] hover:bg-chit-400 active:scale-[0.98]"
                 >
                   <IconPlay className="size-3.5" />
@@ -78,6 +79,7 @@ export default async function Home() {
 
                 <Link
                   href="/browse/movie"
+                  prefetch={false}
                   className="inline-flex items-center gap-1.5 rounded-full border border-ink-600/70 bg-ink-950/40 px-5 py-2.5 text-[13.5px] font-medium text-ink-200 backdrop-blur-sm transition-[background-color,color,border-color] duration-200 ease-[var(--ease-standard)] hover:border-ink-500 hover:bg-ink-900/60 hover:text-ink-100"
                 >
                   Browse all

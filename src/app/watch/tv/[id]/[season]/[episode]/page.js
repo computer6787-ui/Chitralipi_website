@@ -54,6 +54,7 @@ export default async function WatchEpisode({ params }) {
         <div className="min-w-0">
           <Link
             href={`/tv/${id}`}
+            prefetch={false}
             className="group inline-flex items-center gap-1.5 text-[12.5px] text-ink-400 transition-colors duration-200 hover:text-ink-100"
           >
             <span className="inline-block transition-transform duration-300 ease-[var(--ease-emphasised)] group-hover:-translate-x-0.5">
@@ -94,6 +95,7 @@ export default async function WatchEpisode({ params }) {
           {prev ? (
             <Link
               href={`/watch/tv/${id}/${seasonNumber}/${prev.episode_number}`}
+              prefetch={false}
               className="group plate min-w-0 rounded-xl p-4 transition-[transform,border-color] duration-200 ease-[var(--ease-emphasised)] hover:-translate-y-0.5 hover:border-ink-600"
             >
               <span className="flex items-center gap-1.5 text-[11px] font-semibold tracking-[0.12em] text-ink-400 uppercase transition-colors duration-200 group-hover:text-chit-400">
@@ -113,6 +115,7 @@ export default async function WatchEpisode({ params }) {
           {next && (
             <Link
               href={`/watch/tv/${id}/${seasonNumber}/${next.episode_number}`}
+              prefetch={false}
               className="group plate min-w-0 rounded-xl p-4 text-right transition-[transform,border-color] duration-200 ease-[var(--ease-emphasised)] hover:-translate-y-0.5 hover:border-ink-600"
             >
               <span className="flex items-center justify-end gap-1.5 text-[11px] font-semibold tracking-[0.12em] text-ink-400 uppercase transition-colors duration-200 group-hover:text-chit-400">
@@ -132,7 +135,7 @@ export default async function WatchEpisode({ params }) {
       <p className="mt-10 max-w-[70ch] text-[12px] leading-relaxed text-ink-500">
         Playback is provided by an embedded third-party player. If you see popups or fake
         download buttons,{" "}
-        <Link href="/adblock" className="text-chit-400 underline underline-offset-2">
+        <Link href="/adblock" prefetch={false} className="text-chit-400 underline underline-offset-2">
           install the ad blocker
         </Link>
         .

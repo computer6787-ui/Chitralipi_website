@@ -31,6 +31,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
  * from lingering.
  */
 const SAFETY_TIMEOUT_MS = 15000;
+const FULLSCREEN_CONTROLS_TIMEOUT_MS = 5000;
 
 export default function PlayerFrame({
   src,
@@ -42,7 +43,13 @@ export default function PlayerFrame({
 }) {
   // Starts `false` so the skeleton is present in the server-rendered HTML.
   const [loaded, setLoaded] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [fullscreenMessage, setFullscreenMessage] = useState("");
   const timer = useRef(null);
+  const fullscreenControlsTimer = useRef(null);
+  const playerRef = useRef(null);
+  const fullscreenButtonRef = useRef(null);
+  const [fullscreenButtonVisible, setFullscreenButtonVisible] = useState(true);
   const currentProviderName = provider?.name || providerName;
 
   const handleLoad = useCallback(() => {
@@ -62,8 +69,110 @@ export default function PlayerFrame({
     };
   }, [src]);
 
+  useEffect(() => {
+    const syncFullscreen = () => {
+      const active = document.fullscreenElement === playerRef.current;
+      setIsFullscreen(active);
+      if (!active) {
+        setFullscreenMessage("");
+        window.screen.orientation?.unlock?.();
+      }
+    };
+
+    document.addEventListener("fullscreenchange", syncFullscreen);
+    return () => document.removeEventListener("fullscreenchange", syncFullscreen);
+  }, []);
+
+  useEffect(() => {
+    if (!isFullscreen || !fullscreenMessage) return;
+
+    const clearWhenLandscape = () => {
+      if (window.matchMedia("(orientation: landscape)").matches) {
+        setFullscreenMessage("");
+      }
+    };
+
+    window.addEventListener("orientationchange", clearWhenLandscape);
+    return () => window.removeEventListener("orientationchange", clearWhenLandscape);
+  }, [fullscreenMessage, isFullscreen]);
+
+  useEffect(() => {
+    if (!isFullscreen) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [isFullscreen]);
+
+  const showFullscreenButton = useCallback(() => {
+    setFullscreenButtonVisible(true);
+    clearTimeout(fullscreenControlsTimer.current);
+
+    if (document.fullscreenElement === playerRef.current) {
+      fullscreenControlsTimer.current = setTimeout(() => {
+        if (document.activeElement !== fullscreenButtonRef.current) {
+          setFullscreenButtonVisible(false);
+        }
+      }, FULLSCREEN_CONTROLS_TIMEOUT_MS);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isFullscreen) {
+      showFullscreenButton();
+    } else {
+      setFullscreenButtonVisible(true);
+      clearTimeout(fullscreenControlsTimer.current);
+    }
+
+    return () => clearTimeout(fullscreenControlsTimer.current);
+  }, [isFullscreen, showFullscreenButton]);
+
+  async function toggleFullscreen() {
+    const player = playerRef.current;
+    if (!player) return;
+
+    if (document.fullscreenElement === player) {
+      try {
+        await document.exitFullscreen();
+      } catch {
+        setFullscreenMessage("Use your browser controls to exit full screen.");
+      }
+      return;
+    }
+
+    if (typeof player.requestFullscreen !== "function") {
+      setFullscreenMessage("This browser does not support full screen for embedded players.");
+      return;
+    }
+
+    setFullscreenMessage("");
+    try {
+      await player.requestFullscreen();
+      showFullscreenButton();
+    } catch {
+      setFullscreenMessage("The browser blocked full screen. Check this site's browser permissions.");
+      return;
+    }
+
+    try {
+      const orientation = window.screen.orientation;
+      if (typeof orientation?.lock === "function") {
+        await orientation.lock("landscape");
+      } else if (window.matchMedia("(orientation: portrait)").matches) {
+      }
+      } catch {
+      }
+  }
+
   return (
-    <div className="relative size-full">
+    <div
+      ref={playerRef}
+      className="player-frame-root relative size-full"
+      onPointerMove={showFullscreenButton}
+      onTouchStart={showFullscreenButton}
+    >
       <iframe
         key={`${provider?.id || ""}-${src}`}
         src={src}
@@ -74,11 +183,7 @@ export default function PlayerFrame({
         allow="autoplay; fullscreen; picture-in-picture; encrypted-media"
         referrerPolicy="origin-when-cross-origin"
         loading="lazy"
-        sandbox={
-          provider?.sandbox
-            ? "allow-scripts allow-same-origin allow-forms allow-presentation"
-            : undefined
-        }
+        onPointerEnter={showFullscreenButton}
       />
 
       {/* Decorative overlay. Never interactive, gone the moment it loads. */}
@@ -136,6 +241,38 @@ export default function PlayerFrame({
       <noscript>
         <style>{`[data-player-skeleton]{display:none!important}`}</style>
       </noscript>
+
+      <button
+        ref={fullscreenButtonRef}
+        type="button"
+        aria-label={isFullscreen ? "Exit full screen" : "Enter full screen"}
+        aria-pressed={isFullscreen}
+        onClick={toggleFullscreen}
+        onFocus={showFullscreenButton}
+        onBlur={showFullscreenButton}
+        onPointerEnter={showFullscreenButton}
+        tabIndex={fullscreenButtonVisible ? 0 : -1}
+        aria-hidden={!fullscreenButtonVisible}
+        className={`absolute z-30 inline-flex min-h-11 items-center rounded-lg border border-white/20 bg-black/75 px-3 text-xs font-semibold text-white shadow-lg backdrop-blur transition-[opacity,background-color] hover:bg-black/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white ${
+          fullscreenButtonVisible ? "opacity-100" : "pointer-events-none opacity-0"
+        }`}
+        style={{
+          top: "max(0.75rem, env(safe-area-inset-top))",
+          right: "max(0.75rem, env(safe-area-inset-right))",
+        }}
+      >
+        {isFullscreen ? "Exit full screen" : "Full screen"}
+      </button>
+
+      {fullscreenMessage && (
+        <p
+          role="status"
+          className="absolute inset-x-3 bottom-3 z-30 rounded-lg bg-black/85 px-3 py-2 text-center text-xs text-white"
+          style={{ bottom: "max(0.75rem, env(safe-area-inset-bottom))" }}
+        >
+          {fullscreenMessage}
+        </p>
+      )}
     </div>
   );
 }

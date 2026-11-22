@@ -31,6 +31,7 @@ export default async function WatchMovie({ params }) {
         <div className="min-w-0">
           <Link
             href={`/movie/${id}`}
+            prefetch={false}
             className="group inline-flex items-center gap-1.5 text-[12.5px] text-ink-400 transition-colors duration-200 hover:text-ink-100"
           >
             <span className="inline-block transition-transform duration-300 ease-[var(--ease-emphasised)] group-hover:-translate-x-0.5">
@@ -73,7 +74,7 @@ export function AdblockNote() {
     <p className="mt-10 max-w-[70ch] text-[12px] leading-relaxed text-ink-500">
       Playback is provided by an embedded third-party player. If you see popups or fake
       download buttons,{" "}
-      <Link href="/adblock" className="text-chit-400 underline underline-offset-2">
+      <Link href="/adblock" prefetch={false} className="text-chit-400 underline underline-offset-2">
         install the ad blocker
       </Link>
       .
