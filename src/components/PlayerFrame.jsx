@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { GRACE_MS, TIMEOUT_MS } from "@/lib/selector";
@@ -6,8 +6,9 @@ import { GRACE_MS, TIMEOUT_MS } from "@/lib/selector";
 export default function PlayerFrame({ src, status, onOutcome, titleKey, reportBroken, title, poster = null, label = "Loading player", provider = null }) {
   const [ready, setReady] = useState(false);
   const frameRef = useRef(null);
-  const loadHandlerRef = useRef(null);
-  const handleLoad = useCallback(() => loadHandlerRef.current?.(), []);
+  const iframeHandlersRef = useRef(null);
+  const handleLoad = useCallback(() => iframeHandlersRef.current?.load(), []);
+  const handleError = useCallback(() => iframeHandlersRef.current?.error(), []);
 
   useEffect(() => {
     if (!src) return;
@@ -15,12 +16,34 @@ export default function PlayerFrame({ src, status, onOutcome, titleKey, reportBr
     let done = false;
     let graceTimer = null;
     let hardTimer = null;
-    const settle = (ok) => { if (done) return; done = true; clearTimeout(graceTimer); clearTimeout(hardTimer); onOutcome(ok); };
-    loadHandlerRef.current = () => { if (done) return; clearTimeout(hardTimer); graceTimer = setTimeout(() => { setReady(true); settle(true); }, GRACE_MS); };
-    const onMsg = (e) => { if (e.source !== frameRef.current?.contentWindow) return; if (e.data?.event === "play") { setReady(true); settle(true); } else if (e.data?.event === "error") { settle(false); } };
+    const settle = (ok) => {
+      if (done) return;
+      done = true;
+      clearTimeout(graceTimer);
+      clearTimeout(hardTimer);
+      onOutcome(ok);
+    };
+    // onLoad fires even when provider has no content for this title — treat as neutral.
+    // Only explicit play/error messages or hard timeout decide outcome so fallback fires correctly.
+    iframeHandlersRef.current = {
+      load: () => {
+        if (!done) graceTimer = setTimeout(() => { setReady(true); settle(true); }, GRACE_MS);
+      },
+      error: () => settle(false),
+    };
+    const onMsg = (e) => {
+      if (e.source !== frameRef.current?.contentWindow) return;
+      if (e.data?.event === "play") { setReady(true); settle(true); }
+      else if (e.data?.event === "error") settle(false);
+    };
     window.addEventListener("message", onMsg);
-    hardTimer = setTimeout(() => settle(false), TIMEOUT_MS);
-    return () => { loadHandlerRef.current = null; window.removeEventListener("message", onMsg); clearTimeout(graceTimer); clearTimeout(hardTimer); };
+    hardTimer = setTimeout(() => settle(false), TIMEOUT_MS + GRACE_MS);
+    return () => {
+      iframeHandlersRef.current = null;
+      window.removeEventListener("message", onMsg);
+      clearTimeout(graceTimer);
+      clearTimeout(hardTimer);
+    };
   }, [src, onOutcome]);
 
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -77,7 +100,7 @@ export default function PlayerFrame({ src, status, onOutcome, titleKey, reportBr
       return;
     }
     setFullscreenMessage("");
-    try { await player.requestFullscreen(); showFullscreenButton(); } catch { setFullscreenMessage("The browser blocked full screen. Check this site\\'s browser permissions."); return; }
+    try { await player.requestFullscreen(); showFullscreenButton(); } catch { setFullscreenMessage("The browser blocked full screen. Check this site's browser permissions."); return; }
     try {
       const orientation = window.screen.orientation;
       if (typeof orientation?.lock === "function") { await orientation.lock("landscape"); }
@@ -91,7 +114,7 @@ export default function PlayerFrame({ src, status, onOutcome, titleKey, reportBr
       {src && (
         <iframe ref={frameRef} src={src} title={title} className="absolute inset-0 h-full w-full" allowFullScreen
           allow="autoplay; fullscreen; picture-in-picture; encrypted-media" referrerPolicy="origin-when-cross-origin" loading="lazy"
-          onLoad={handleLoad} onError={() => onOutcome(false)} />
+          onLoad={handleLoad} onError={handleError} />
       )}
       <FullscreenButton active={isFullscreen} onClick={toggleFullscreen} />
       {fullscreenMessage && (
