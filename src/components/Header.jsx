@@ -1,11 +1,12 @@
 "use client";
 
 import { usePathname } from "next/navigation";
+import Image from "next/image";
 import { Suspense, useEffect, useState } from "react";
 import SearchForm from "@/components/SearchForm";
 import RouteProgress from "@/components/RouteProgress";
 import IntentLink from "@/components/IntentLink";
-import { IconClose, IconGrid, IconSearch } from "@/components/icons";
+import { IconClose, IconSearch } from "@/components/icons";
 
 /**
  * The one media-type switcher. "All" is the mixed catalogue on the home page;
@@ -89,9 +90,14 @@ export default function Header() {
       >
         <div className="shell flex h-(--header-h) items-center gap-4">
           <IntentLink href="/" className="group flex shrink-0 items-center gap-2.5" aria-label="Chitralipi home">
-            <span className="grid size-8 place-items-center rounded-[10px] bg-linear-to-br from-chit-300 via-chit-500 to-chit-600 text-ink-950 shadow-[0_2px_10px_-2px_rgba(217,162,83,0.5)] transition-transform duration-300 ease-[var(--ease-emphasised)] group-hover:scale-105">
-              <IconGrid className="size-4.5" />
-            </span>
+            <Image
+              src="/chitralipi-logo.png"
+              alt=""
+              width={46}
+              height={34}
+              priority
+              className="h-8 w-11 shrink-0 object-contain transition-transform duration-300 ease-[var(--ease-emphasised)] group-hover:scale-105"
+            />
             <span className="font-display text-[19px] leading-none tracking-tight text-ink-100">
               Chitralipi
             </span>
@@ -115,23 +121,25 @@ export default function Header() {
           </div>
 
           <nav className="ml-auto flex shrink-0 items-center gap-1 md:ml-0">
-            {NAV.map((item) => {
-              const current = isCurrent(item.href);
-              return (
-                <IntentLink
-                  key={item.href}
-                  href={item.href}
-                  aria-current={current ? "page" : undefined}
-                  className={`rounded-lg px-3 py-2 text-[13px] font-medium transition-colors duration-200 ease-[var(--ease-standard)] ${
-                    current
-                      ? "bg-ink-800/80 text-ink-100"
-                      : "text-ink-400 hover:bg-ink-800/70 hover:text-ink-100"
-                  }`}
-                >
-                  {item.label}
-                </IntentLink>
-              );
-            })}
+            <div className="hidden items-center gap-1 md:flex">
+              {NAV.map((item) => {
+                const current = isCurrent(item.href);
+                return (
+                  <IntentLink
+                    key={item.href}
+                    href={item.href}
+                    aria-current={current ? "page" : undefined}
+                    className={`rounded-lg px-3 py-2 text-[13px] font-medium transition-colors duration-200 ease-[var(--ease-standard)] ${
+                      current
+                        ? "bg-ink-800/80 text-ink-100"
+                        : "text-ink-400 hover:bg-ink-800/70 hover:text-ink-100"
+                    }`}
+                  >
+                    {item.label}
+                  </IntentLink>
+                );
+              })}
+            </div>
 
             <IntentLink
               href="/search"

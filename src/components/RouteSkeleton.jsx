@@ -25,7 +25,7 @@ import { useEffect, useState } from "react";
 import RouteActivity from "@/components/RouteActivity";
 
 const GRID = "grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6";
-const RAIL_W = "w-[9.5rem] sm:w-[10.5rem] lg:w-[11.5rem]";
+const RAIL_W = "w-[10rem] sm:w-[11.75rem] lg:w-[13.5rem]";
 
 /**
  * How long a skeleton waits before it becomes visible.

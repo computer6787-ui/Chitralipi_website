@@ -1,7 +1,7 @@
 import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
+import Image from "next/image";
 import Header from "@/components/Header";
 import IntentLink from "@/components/IntentLink";
-import { IconGrid } from "@/components/icons";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -47,9 +47,13 @@ export default function RootLayout({ children }) {
         <footer className="relative z-10 mt-24 border-t border-ink-800/80">
           <div className="shell flex flex-col items-center gap-6 py-10 text-center sm:flex-row sm:justify-between sm:text-left">
             <IntentLink href="/" className="flex items-center gap-2.5">
-              <span className="grid size-8 place-items-center rounded-lg bg-linear-to-br from-chit-400 to-chit-600 text-ink-950">
-                <IconGrid className="size-4.5" />
-              </span>
+              <Image
+                src="/chitralipi-logo.png"
+                alt=""
+                width={46}
+                height={34}
+                className="h-8 w-11 shrink-0 object-contain"
+              />
               <span className="font-display text-[17px] tracking-tight text-ink-100">Chitralipi</span>
             </IntentLink>
             <p className="max-w-md text-[11.5px] leading-relaxed text-ink-400">

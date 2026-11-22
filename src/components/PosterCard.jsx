@@ -31,14 +31,14 @@ export default function PosterCard({
   return (
     <IntentLink
       href={href}
-      className={`group block ${className || "w-[9.5rem] sm:w-[10.5rem] lg:w-[11.5rem]"}`}
+      className={`group block ${className || "w-[10rem] sm:w-[11.75rem] lg:w-[13.5rem]"}`}
       aria-label={`${title}${year ? `, ${year}` : ""}`}
     >
       {/* Hairline via `border`, not `ring`: both write `box-shadow`, so
           combining them would silently drop one. This way `box-shadow` is
           free for elevation alone. */}
       <div
-        className="card-lift relative aspect-2/3 overflow-hidden rounded-[14px] border border-ink-700/80 bg-ink-850 [box-shadow:var(--elev-2)] transition-[border-color,box-shadow] duration-200 ease-[var(--ease-standard)] group-hover:border-chit-500/45 group-hover:[box-shadow:var(--elev-3)]"
+        className="card-lift relative aspect-2/3 overflow-hidden rounded-2xl border border-ink-700/80 bg-ink-850 [box-shadow:var(--elev-2)] transition-[border-color,box-shadow] duration-200 ease-[var(--ease-standard)] group-hover:border-chit-500/45 group-hover:[box-shadow:var(--elev-3)]"
       >
         {poster ? (
           <img

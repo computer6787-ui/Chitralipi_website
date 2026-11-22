@@ -55,7 +55,7 @@
   color-scheme: dark;
 
   /* Rhythm */
-  --header-h: 3.5rem;
+  --header-h: 4rem;
   --gutter: 1.25rem;
   --max-w: 90rem;
 
@@ -168,26 +168,6 @@
     .shelf {
       gap: 1.125rem;
     }
-  }
-
-  /* Auto-hiding scroll affordance: the fade appears only when there is
-     actually more content to the right. Toggled by the Rail component. */
-  .rail-fade {
-    position: relative;
-  }
-  .rail-fade::after {
-    content: "";
-    pointer-events: none;
-    position: absolute;
-    inset-block: 0;
-    right: 0;
-    width: 3.5rem;
-    background: linear-gradient(to right, transparent, var(--color-ink-950) 80%);
-    opacity: 0;
-    transition: opacity var(--dur-base) var(--ease-standard);
-  }
-  .rail-fade[data-overflow="true"]::after {
-    opacity: 1;
   }
 
   /* ------------------------------ Surfaces ----------------------------- */
@@ -391,7 +371,7 @@
   }
   /* Poster + backdrop frames keep their own radius from the real component. */
   .sk-poster {
-    border-radius: 14px;
+    border-radius: 16px;
   }
 
   @keyframes sk-sweep {
