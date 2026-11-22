@@ -70,8 +70,8 @@ export default function ProviderSwitcher({ currentProvider, onChange }) {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 top-full z-50 mt-2 w-[calc(100vw-2.5rem)] max-w-xs sm:w-auto sm:min-w-[280px] overflow-hidden rounded-lg border border-ink-700 bg-ink-900/95 backdrop-blur-md [box-shadow:var(--elev-3)]">
-          <div className="p-1.5 space-y-0.5">
+        <div className="absolute right-0 top-full z-50 mt-2 flex max-h-[70vh] w-[calc(100vw-2.5rem)] max-w-xs flex-col overflow-hidden rounded-lg border border-ink-700 bg-ink-900/95 backdrop-blur-md [box-shadow:var(--elev-3)] sm:max-h-[28rem] sm:w-auto sm:min-w-[280px]">
+          <div className="min-h-0 flex-1 space-y-0.5 overflow-y-auto overscroll-contain p-1.5">
             {PROVIDERS.map((provider) => (
               <button
                 key={provider.id}
@@ -116,7 +116,7 @@ export default function ProviderSwitcher({ currentProvider, onChange }) {
               </button>
             ))}
           </div>
-          <div className="border-t border-ink-800 bg-ink-950/50 px-3 py-2">
+          <div className="shrink-0 border-t border-ink-800 bg-ink-950/50 px-3 py-2">
             <p className="text-[10px] leading-relaxed text-ink-500">
               Switch providers if playback fails or quality is poor
             </p>

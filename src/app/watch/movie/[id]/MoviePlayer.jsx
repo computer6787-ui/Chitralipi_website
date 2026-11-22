@@ -1,33 +1,27 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import PlayerFrame from "@/components/PlayerFrame";
 import ProviderSwitcher from "@/components/ProviderSwitcher";
 import { movieEmbedUrl } from "@/lib/embed";
-import { getDefaultProvider, getProvider } from "@/lib/providers";
-
-const STORAGE_KEY = "cinescope-provider";
+import { usePlayer } from "@/hooks/usePlayer";
 
 export default function MoviePlayer({ tmdbId, title, poster }) {
-  const [provider, setProvider] = useState(getDefaultProvider().id);
+  const titleKey = `m:${tmdbId}`;
+  const { provider, status, onOutcome, reportBroken, force } = usePlayer(titleKey);
   const [isClient, setIsClient] = useState(false);
 
-  // Load saved provider from localStorage
-  useEffect(() => {
+  // Trigger hydration on first client render
+  if (!isClient) {
     setIsClient(true);
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) {
-      setProvider(saved);
-    }
-  }, []);
+  }
+
+  const src = provider ? movieEmbedUrl(tmdbId, provider.id) : null;
 
   const handleProviderChange = (newProvider) => {
-    setProvider(newProvider);
-    localStorage.setItem(STORAGE_KEY, newProvider);
+    force(newProvider);
   };
 
-  const src = movieEmbedUrl(tmdbId, provider);
-  const providerData = getProvider(provider);
 
   return (
     <>
@@ -54,7 +48,7 @@ export default function MoviePlayer({ tmdbId, title, poster }) {
         {isClient && (
           <div className="ml-auto sm:ml-0">
             <ProviderSwitcher
-              currentProvider={provider}
+              currentProvider={provider?.id}
               onChange={handleProviderChange}
             />
           </div>
@@ -65,10 +59,14 @@ export default function MoviePlayer({ tmdbId, title, poster }) {
         {src ? (
           <PlayerFrame
             src={src}
+            status={status}
+            onOutcome={onOutcome}
+            titleKey={titleKey}
+            reportBroken={reportBroken}
             title={title}
             poster={poster}
             label={`Loading ${title}`}
-            provider={providerData}
+            provider={provider}
           />
         ) : (
           <div className="grid size-full place-items-center p-6 text-center text-[13px] text-ink-400">
@@ -115,7 +113,7 @@ export default function MoviePlayer({ tmdbId, title, poster }) {
                   &mdash; defaultly protected by Chitralipi Blocker to vaporize popups &amp; redirects!
                 </span>
               </span>
-              {provider === "cinesrc" ? (
+              {provider?.id === "cinesrc" ? (
                 <span className="shrink-0 rounded bg-amber-500/20 px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wider text-amber-300">
                   Active
                 </span>
