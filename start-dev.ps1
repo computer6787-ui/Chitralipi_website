@@ -1,8 +1,8 @@
-﻿# CineScope Development Startup Script
+﻿# chitrastreams Development Startup Script
 # ======================================================
 
 Write-Host "========================================" -ForegroundColor Cyan
-Write-Host "  CineScope Startup" -ForegroundColor Cyan
+Write-Host "  chitrastreams Startup" -ForegroundColor Cyan
 Write-Host "========================================" -ForegroundColor Cyan
 Write-Host ""
 
@@ -29,11 +29,11 @@ Write-Host "========================================" -ForegroundColor Cyan
 Write-Host "  Starting Development Server" -ForegroundColor Cyan
 Write-Host "========================================" -ForegroundColor Cyan
 Write-Host ""
-Write-Host "→ CineScope (port 8080)" -ForegroundColor Magenta
+Write-Host "→ chitrastreams (port 8080)" -ForegroundColor Magenta
 Write-Host ""
 
-# Start CineScope in the background
-Write-Host "Starting CineScope on port 8080..." -ForegroundColor Green
+# Start chitrastreams in the background
+Write-Host "Starting chitrastreams on port 8080..." -ForegroundColor Green
 Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd '$PWD'; npm run dev" -WindowStyle Normal
 
 Start-Sleep -Seconds 8

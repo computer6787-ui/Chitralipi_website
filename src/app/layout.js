@@ -28,8 +28,8 @@ const display = Instrument_Serif({
 
 export const metadata = {
   title: {
-    default: "Chitralipi — Movies & Series",
-    template: "%s | Chitralipi",
+    default: "chitrastreams — Movies & Series",
+    template: "%s | chitrastreams",
   },
   description:
     "Stream movies and series. Browse by genre, sort by rating or popularity, and pick up where you left off.",
@@ -48,13 +48,13 @@ export default function RootLayout({ children }) {
           <div className="shell flex flex-col items-center gap-6 py-10 text-center sm:flex-row sm:justify-between sm:text-left">
             <IntentLink href="/" className="flex items-center gap-2.5">
               <Image
-                src="/chitralipi-logo.png"
+                src="/chitrastreams-logo.png"
                 alt=""
                 width={46}
                 height={34}
                 className="h-8 w-11 shrink-0 object-contain"
               />
-              <span className="font-display text-[17px] tracking-tight text-ink-100">Chitralipi</span>
+              <span className="font-display text-[17px] tracking-tight text-ink-100">chitrastreams</span>
             </IntentLink>
             <p className="max-w-md text-[11.5px] leading-relaxed text-ink-400">
               Metadata &amp; artwork from{" "}

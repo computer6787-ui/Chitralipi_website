@@ -24,12 +24,12 @@ const OPTIONS = [
     tag: "Best for other browsers",
     name: "uBlock Origin",
     blurb:
-      "The reference implementation. If you are not on Brave and install only one thing, install this - it already covers everything Chitralipi shows, plus far more.",
+      "The reference implementation. If you are not on Brave and install only one thing, install this - it already covers everything chitrastreams shows, plus far more.",
     steps: [
       "Install uBlock Origin from your browser's official store.",
       "Settings > Filter lists - keep EasyList, EasyPrivacy and Fanboy's Annoyances enabled.",
       "Settings > Filter assets - leave the defaults enabled.",
-      "No Chitralipi-specific setup is needed.",
+      "No chitrastreams-specific setup is needed.",
     ],
     external: true,
     externalUrl: "https://ublockorigin.com/",

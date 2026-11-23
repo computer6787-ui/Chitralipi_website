@@ -89,9 +89,9 @@ export default function Header() {
         }`}
       >
         <div className="shell flex h-(--header-h) items-center gap-4">
-          <IntentLink href="/" className="group flex shrink-0 items-center gap-2.5" aria-label="Chitralipi home">
+          <IntentLink href="/" className="group flex shrink-0 items-center gap-2.5" aria-label="chitrastreams home">
             <Image
-              src="/chitralipi-logo.png"
+              src="/chitrastreams-logo.png"
               alt=""
               width={46}
               height={34}
@@ -99,7 +99,7 @@ export default function Header() {
               className="h-8 w-11 shrink-0 object-contain transition-transform duration-300 ease-[var(--ease-emphasised)] group-hover:scale-105"
             />
             <span className="font-display text-[19px] leading-none tracking-tight text-ink-100">
-              Chitralipi
+              chitrastreams
             </span>
           </IntentLink>
 

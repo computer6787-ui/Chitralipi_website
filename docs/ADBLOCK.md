@@ -1,4 +1,4 @@
-# Ad blocking on Chitralipi
+# Ad blocking on chitrastreams
 
 ## Why the site cannot fix this itself
 
@@ -12,7 +12,7 @@ is VidLink:
 > VidLink is the default provider
 > served inside its cross-origin player. Use a browser content blocker if needed.
 
-The same-origin policy means `chitralipi` code cannot read or modify anything
+The same-origin policy means `chitrastreams` code cannot read or modify anything
 inside that frame. Popunders, overlay click-bait and ad iframes are injected by
 the player's host, so **no server-side or React-side change can remove them**.
 Blocking has to happen in your browser, on your machine. (The other providers
@@ -70,4 +70,4 @@ install this.
    Annoyances enabled (these are the defaults).
 3. **Settings → Filter assets**: leave the defaults enabled.
 
-No Chitralipi-specific setup is needed.
+No chitrastreams-specific setup is needed.

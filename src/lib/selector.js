@@ -58,7 +58,7 @@ export const MAX_TRIES = 2;
 export const GRACE_MS = 1200; // after `load`, wait this long before calling it a success
 export const TIMEOUT_MS = 8000; // give up on a provider after this long
 
-const STORAGE_KEY = "chitralipi-selector-v1";
+const STORAGE_KEY = "chitrastreams-selector-v1";
 const DEAD_URL = "/dead.json";
 const DEFAULT_SEED = 0.4;
 const COOLDOWN_BASE_MS = 3e5; // 5 min, doubled each further fail

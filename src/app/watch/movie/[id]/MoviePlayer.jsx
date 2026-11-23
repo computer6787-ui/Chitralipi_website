@@ -110,7 +110,7 @@ export default function MoviePlayer({ tmdbId, title, poster }) {
                   <strong className="font-semibold text-amber-100 underline decoration-amber-400/60 underline-offset-2">
                     CineSrc
                   </strong>{" "}
-                  &mdash; defaultly protected by Chitralipi Blocker to vaporize popups &amp; redirects!
+                  &mdash; defaultly protected by chitrastreams Blocker to vaporize popups &amp; redirects!
                 </span>
               </span>
               {provider?.id === "cinesrc" ? (
