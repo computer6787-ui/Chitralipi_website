@@ -48,7 +48,7 @@ export default function RootLayout({ children }) {
           <div className="shell flex flex-col items-center gap-6 py-10 text-center sm:flex-row sm:justify-between sm:text-left">
             <IntentLink href="/" className="flex items-center gap-2.5">
               <Image
-                src="/chitrastreams-logo.png"
+                src="/chitralipi-logo.png"
                 alt=""
                 width={46}
                 height={34}

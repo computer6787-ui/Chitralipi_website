@@ -91,7 +91,7 @@ export default function Header() {
         <div className="shell flex h-(--header-h) items-center gap-4">
           <IntentLink href="/" className="group flex shrink-0 items-center gap-2.5" aria-label="chitrastreams home">
             <Image
-              src="/chitrastreams-logo.png"
+              src="/chitralipi-logo.png"
               alt=""
               width={46}
               height={34}
